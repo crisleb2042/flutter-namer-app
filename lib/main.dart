@@ -9,6 +9,7 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
+//  Every app is considered a Widget and they all contain a build() method
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
@@ -25,6 +26,8 @@ class MyApp extends StatelessWidget {
   }
 }
 
+//  The ChangeNotifier Class is like a megaphone that shouts out to your app whenever 
+//  something important changes, so everyone stays in the loop and up-to-date!
 class MyAppState extends ChangeNotifier {
   var current = WordPair.random();
 }
@@ -32,12 +35,14 @@ class MyAppState extends ChangeNotifier {
 class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    // MyAppState is always being watched for updates, and if there is any change
+    // to the appState, then the build() method will re-build
     var appState = context.watch<MyAppState>();
 
     return Scaffold(
-      body: Column(
+      body: Column( //  Defines Layout
         children: [
-          Text('A random AWESOME idea:'),  // ← Example change.
+          Text('Here\'s a wicked random & AWESOME idea:'),  // ← Example change.
           Text(appState.current.asLowerCase),
 
           ElevatedButton(
