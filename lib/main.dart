@@ -43,12 +43,13 @@ class MyHomePage extends StatelessWidget {
     // MyAppState is always being watched for updates, and if there is any change
     // to the appState, then the build() method will re-build
     var appState = context.watch<MyAppState>();
+    var pair = appState.current;
 
     return Scaffold(
       body: Column( //  Defines Layout
         children: [
           Text('Here\'s a wicked random & AWESOME idea:'),  // ← Example change.
-          Text(appState.current.asLowerCase),
+          BigCard(pair: pair),
 
           ElevatedButton(
             onPressed: () {
@@ -57,6 +58,28 @@ class MyHomePage extends StatelessWidget {
             child: Text('Next'),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class BigCard extends StatelessWidget {
+  const BigCard({
+    super.key,
+    required this.pair,
+  });
+
+  final WordPair pair;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Card(
+      color: theme.colorScheme.primary,
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Text(pair.asLowerCase),
       ),
     );
   }
