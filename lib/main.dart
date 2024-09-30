@@ -1,5 +1,6 @@
 import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -71,47 +72,51 @@ class _MyHomePageState extends State<MyHomePage> {
         throw UnimplementedError('No widget for $selectedIndex');
     }
 
-    return Scaffold(
-      body: Row(
-        children: [
-          //  Ensures child is not obscured by hardware notch or status bar
-          SafeArea(
-            child: NavigationRail(
-              //  Creates a Material Design navigation rail
-              extended: true, //  Controls labels next to icons
-              destinations: [
-                NavigationRailDestination(
-                  icon: Icon(Icons.home),
-                  label: Text('Home'),
-                ),
-                NavigationRailDestination(
-                  icon: Icon(Icons.favorite),
-                  label: Text('Favorites'),
-                ),
-              ],
-              selectedIndex: selectedIndex,
-              onDestinationSelected: (value) {
-                //  Notify the framework that the internal state of this object has changed.
-                setState(() {
-                  selectedIndex = value;
-                });
-              },
+    //  LayoutBuilder's builder is calledback everytime the constraints change
+    return LayoutBuilder(builder: (context, constraints) {
+      return Scaffold(
+        body: Row(
+          children: [
+            //  Ensures child is not obscured by hardware notch or status bar
+            SafeArea(
+              child: NavigationRail(
+                //  Creates a Material Design navigation rail
+                extended: constraints.maxWidth >=
+                    600, //  sets responsive text labels to navigation when constraints change
+                destinations: [
+                  NavigationRailDestination(
+                    icon: Icon(Icons.home),
+                    label: Text('Home'),
+                  ),
+                  NavigationRailDestination(
+                    icon: Icon(Icons.favorite),
+                    label: Text('Favorites'),
+                  ),
+                ],
+                selectedIndex: selectedIndex,
+                onDestinationSelected: (value) {
+                  //  Notify the framework that the internal state of this object has changed.
+                  setState(() {
+                    selectedIndex = value;
+                  });
+                },
+              ),
             ),
-          ),
 
-          //  Expanded widgets are extremely useful in rows and columns—they let you
-          //  express layouts where some children take only as much space as they
-          //  need (SafeArea, in this case) and other widgets should take as much of
-          //  the remaining room as possible (Expanded, in this case).
-          Expanded(
-            child: Container(
-              color: Theme.of(context).colorScheme.primaryContainer,
-              child: page,
+            //  Expanded widgets are extremely useful in rows and columns—they let you
+            //  express layouts where some children take only as much space as they
+            //  need (SafeArea, in this case) and other widgets should take as much of
+            //  the remaining room as possible (Expanded, in this case).
+            Expanded(
+              child: Container(
+                color: Theme.of(context).colorScheme.primaryContainer,
+                child: page,
+              ),
             ),
-          ),
-        ],
-      ),
-    );
+          ],
+        ),
+      );
+    });
   }
 }
 
