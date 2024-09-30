@@ -64,10 +64,10 @@ class _MyHomePageState extends State<MyHomePage> {
     switch (selectedIndex) {
       case 0:
         page = GeneratorPage();
-        break;
+
       case 1:
-        page = Placeholder();
-        break;
+        page = FavoritesPage();
+
       default:
         throw UnimplementedError('No widget for $selectedIndex');
     }
@@ -79,8 +79,8 @@ class _MyHomePageState extends State<MyHomePage> {
           children: [
             //  Ensures child is not obscured by hardware notch or status bar
             SafeArea(
+              //  Creates a Material Design navigation rail
               child: NavigationRail(
-                //  Creates a Material Design navigation rail
                 extended: constraints.maxWidth >=
                     600, //  sets responsive text labels to navigation when constraints change
                 destinations: [
@@ -117,6 +117,36 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       );
     });
+  }
+}
+
+// ---------- TODO: ADD NEW PAGE ------- //
+// ---------- TODO: Access favorites list ------- //
+class FavoritesPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    var appState = context.watch<MyAppState>();
+
+    if (appState.favorites.isEmpty) {
+      return Center(
+        child: Text('No favorites yet.'),
+      );
+    }
+
+    return ListView(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(20),
+          child: Text('You have '
+              '${appState.favorites.length} favorites:'),
+        ),
+        for (var pair in appState.favorites)
+          ListTile(
+            leading: Icon(Icons.favorite),
+            title: Text(pair.asLowerCase),
+          ),
+      ],
+    );
   }
 }
 
